@@ -1,5 +1,9 @@
 # Wikiwiki Wikibot: A lightweight solution to automated MediaWiki editing
 
+The word "wiki", to mean collaboratively editable project, originally comes
+from the Hawaiian term "wikiwiki" meaning very fast.  This is a wikibot
+meant to be straightforward and easy to use.
+
 ## Setup and configuration
 
 `pip install -r requirements.txt`
@@ -21,8 +25,9 @@ A page's ID can be found through `?action=info` (the "Page information" link).
 ### massrollback
 
 Create a file with a format like this
-> en.wikipedia.org 12345
+> en.wikipedia.org 12345  
 > fr.wikisource.org 67890
+
 Where the first word is the full site name and the second is the page ID.
 Save it in a folder called `data`.
 
