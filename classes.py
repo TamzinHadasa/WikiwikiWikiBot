@@ -1,7 +1,7 @@
 """Utility functions."""
 from enum import IntEnum
 import urllib.parse
-from typing import Any, Optional, SupportsIndex, TypeVar, TypedDict
+from typing import Any, Optional, TypeVar, TypedDict
 
 T = TypeVar('T')
 KT = TypeVar('KT')

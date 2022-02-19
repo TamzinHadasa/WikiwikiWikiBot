@@ -7,7 +7,7 @@ from auth import Authorization
 _users = {"username1": Authorization(client_key="",
                                      client_secret="",
                                      access_key="",
-                                     access_secret="")
+                                     access_secret="")}
 DEFAULT_USER = _users["username1"]
 # A MediaWiki site's name.  Everything between "https://" and the first slash
 # or question mark

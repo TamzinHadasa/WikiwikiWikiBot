@@ -10,10 +10,10 @@ from typing import Any, Callable, Literal, Optional, Union
 from requests import Response
 
 from classes import ZBError
-import config
+import config  # pylint: disable=import-error,wrong-import-order
 
  # TODO allow customization by command line
-_session = config.DEFAULT_USER.session() 
+_session = config.DEFAULT_USER.session()
 # To avoid calling anew each time `getpage` is called.  Cached
 # regardless but still better to avoid repeat calls.
 RequestParams = dict[str, object]
@@ -72,7 +72,8 @@ def _request(methodname: Literal['get', 'post'],
     Args:
       method:  A str matching the name of a method that an OAuth1Session
         can have.
-      **kwargs:  Keyword arguments to pass to `method`.
+      site:  A string of a site's domain, e.g. 'en.wikipedia.org'.  Defaults
+        to `config.DEFAULT_SITE`.
 
     Returns:
       An object matching the JSON structure of the relevant API
@@ -88,7 +89,7 @@ def _request(methodname: Literal['get', 'post'],
     params = params or {}
     method: Callable[..., Response] = getattr(_session, methodname)
     # Can raise requests.HTTPError
-    response = method(f"https://{site}.org/w/api.php?", params=params, data=data)
+    response = method(f"https://{site}/w/api.php?", params=params, data=data)
     if not response:  # status code > 400
         raise APIError(f"{response.status_code=}", response.content)
     try:
@@ -105,8 +106,10 @@ def get(params: RequestParams, site=config.DEFAULT_SITE) -> Any:
 
     Automatically specifies output in JSON (overridable).
 
-    Arg:
+    Args:
       params:  Params to supplement/override the default ones.
+      site:  A string of a site's domain, e.g. 'en.wikipedia.org'.  Defaults
+        to `config.DEFAULT_SITE`.
 
     Returns / Raises:
       See `_request` documentation.
@@ -132,6 +135,8 @@ def post(params: RequestParams,
       params:  Params to supplement/override the default ones.
       tokentype:  A TokenType to pass to `get_token`.  Defaults to
         'csrf' like `get_token` and the MW API.
+      site:  A string of a site's domain, e.g. 'en.wikipedia.org'.  Defaults
+        to `config.DEFAULT_SITE`.
 
     Returns / Raises:
       See `_request` documentation.
@@ -151,7 +156,9 @@ def get_token(tokentype: TokenType = 'csrf', site=config.DEFAULT_SITE) -> str:
     R"""Request a token (CSRF by default) from the MediaWiki API.
 
     Args:
-    tokentype:  A TokenType.  Defaults to 'csrf' like the MW API.
+      tokentype:  A TokenType.  Defaults to 'csrf' like the MW API.
+      site:  A string of a site's domain, e.g. 'en.wikipedia.org'.  Defaults
+        to `config.DEFAULT_SITE`.
 
     Returns:
       A str matching a validly-formatted token of the specified type.
@@ -179,6 +186,17 @@ def rollback(page_id: int,
              summary="",
              markbot: bool = False,
              site: str = config.DEFAULT_SITE) -> Any:
+    """Rollback edits by the most recent editor of a page.
+
+    Args:
+      page_id:  The numerical MediaWiki ID for the page.
+      summary:  An edit summary to use.  Defaults to an empty string, which MW
+        converts to the default ES on a given wiki.
+      markbot:  A boolean representing whether to mark the rollback as a bot
+        edit.  Defaults to False.
+      site:  A string of a site's domain, e.g. 'en.wikipedia.org'.  Defaults
+        to `config.DEFAULT_SITE`.
+    """
     user_id_query = get({'action': 'query',
                          'prop': 'revisions',
                          'pageids': page_id,
@@ -186,7 +204,7 @@ def rollback(page_id: int,
                          'rvlimit': 1},
                         site=site)
     try:
-         user_id: str = user_id_query['query']['pages'][str(page_id)][
+        user_id: str = user_id_query['query']['pages'][str(page_id)][
             'revisions'][0]['userid']
     except KeyError as e:
         raise APIError("No token obtained.", user_id_query) from e

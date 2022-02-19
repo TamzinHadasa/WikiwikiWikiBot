@@ -6,10 +6,9 @@ __email__ = "coding@tamz.in"
 __version__ = "0.1.0"
 
 import sys
-import time
 
 import api
-import antivandalism.massrollback
+import scripts.massrollback
 
 
 if __name__ == "__main__":
@@ -18,8 +17,8 @@ if __name__ == "__main__":
         if sys.argv[1] == "rollback":
             print(api.rollback(sys.argv[2]))
         elif sys.argv[1] == "massrollback":
-            antivandalism.massrollback.main(file_name=sys.argv[2],
-                                            summary=sys.argv[3],
-                                            markbot=sys.argv[4] == 'markbot')
+            scripts.massrollback.main(file_name=sys.argv[2],
+                                      summary=sys.argv[3],
+                                      markbot=sys.argv[4] == 'markbot')
     except IndexError:
-       sys.exit()
+        sys.exit()

@@ -1,3 +1,4 @@
+"""Allows for massrollbacking across an arbitrary number of pages on any wiki."""
 from typing import Generator
 
 import api
@@ -14,16 +15,16 @@ def massrollback(pages: list[tuple[str, int]],
                          markbot=markbot,
                          site=page[0])
         except ZBError:
-            print("Did not rollback " + page_id)
+            print(f"Did not rollback {page[0]}: {page[1]}")
 
 
 def generate_page_list(file_name: str) -> Generator[int, None, None]:
     """Create a page list from a file, readable by `massrollback`.
 
     Each page in the file should be in its own row, consiting of a site name,
-    (everything before the `.org`), a space, and then a pageid.  For instance:
-        en.wikipedia 1234
-        fr.wikisource 5678
+    (including the TLD), a space, and then a pageid.  For instance:
+        en.wikipedia.org 1234
+        fr.wikisource.org 5678
     """
     with open("data/" + file_name, 'r', encoding='utf-8') as f:
         for line in f.read().split("\n"):
@@ -41,4 +42,5 @@ def generate_page_list(file_name: str) -> Generator[int, None, None]:
 
 
 def main(file_name: str, summary: str = "", markbot: bool = False) -> None:
+    """Massrollback based on a file matching `generate_page_list`'s specs"""
     massrollback(generate_page_list(file_name), summary, markbot)
