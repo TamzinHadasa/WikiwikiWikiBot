@@ -3,7 +3,5 @@ __pycache__/
 .vscode/
 apicache-py3/
 data/
-.pylintrc
-mypy.ini
 config.py
 *.swp
