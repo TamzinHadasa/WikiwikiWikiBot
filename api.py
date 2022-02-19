@@ -15,7 +15,6 @@ from requests_oauthlib import OAuth1Session
 
 from requests import Response
 
-import action
 from classes import MWAWError, Page, Revision
 import config  # pylint: disable=import-error,wrong-import-order
 import enums
