@@ -16,7 +16,8 @@ def massrollback(pages: list[tuple[str, int]],
                          site=page[0])
         except ZBError:
             print(f"Did not rollback {page[0]}: {page[1]}")
-
+        else:
+            print(f"Rollbacked {page[0]}: {page[1]}")
 
 def generate_page_list(file_name: str) -> Generator[int, None, None]:
     """Create a page list from a file, readable by `massrollback`.
@@ -43,4 +44,5 @@ def generate_page_list(file_name: str) -> Generator[int, None, None]:
 
 def main(file_name: str, summary: str = "", markbot: bool = False) -> None:
     """Massrollback based on a file matching `generate_page_list`'s specs"""
+    print("massrollback main")
     massrollback(generate_page_list(file_name), summary, markbot)

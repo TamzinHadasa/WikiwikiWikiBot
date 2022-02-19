@@ -2,11 +2,8 @@ __pycache__/
 .venv/
 .vscode/
 apicache-py3/
-logs/
-_local/
+data/
 .pylintrc
 mypy.ini
 config.py
-pywikibot.lwp
-throttle.ctrl
 *.swp

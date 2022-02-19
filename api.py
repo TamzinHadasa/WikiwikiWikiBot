@@ -61,7 +61,7 @@ class PageNotFoundError(ZBError):
 
 def _request(methodname: Literal['get', 'post'],
              params: Optional[RequestParams] = None,
-             data: Union[RequestParams | str] = "",
+             data: Union[RequestParams, str] = "",
              site: str = config.DEFAULT_SITE) -> Any:
     """Error handling and JSON conversion for API functions.
 
